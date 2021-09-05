@@ -317,7 +317,7 @@ class AndroidDevice extends Device {
 
     try {
       final RunResult adbVersion = await _processUtils.run(
-        <String>[_androidSdk.adbPath, 'version'],
+        <String>[_androidSdk.adbPath, '-H', 'host.docker.internal', 'version'],
         throwOnError: true,
       );
       if (_isValidAdbVersion(adbVersion.stdout)) {
@@ -339,7 +339,12 @@ class AndroidDevice extends Device {
       //   adb server is out of date.  killing..
       //   * daemon started successfully *
       await _processUtils.run(
-        <String>[_androidSdk.adbPath, 'start-server'],
+        <String>[
+          _androidSdk.adbPath,
+          '-H',
+          'host.docker.internal',
+          'start-server'
+        ],
         throwOnError: true,
       );
 
@@ -1280,6 +1285,8 @@ class AndroidDevicePortForwarder extends DevicePortForwarder {
           .runSync(
             <String>[
               _adbPath,
+              '-H',
+              'host.docker.internal',
               '-s',
               _deviceId,
               'forward',
@@ -1327,6 +1334,8 @@ class AndroidDevicePortForwarder extends DevicePortForwarder {
     final RunResult process = await _processUtils.run(
       <String>[
         _adbPath,
+        '-H',
+        'host.docker.internal',
         '-s',
         _deviceId,
         'forward',
@@ -1384,6 +1393,8 @@ class AndroidDevicePortForwarder extends DevicePortForwarder {
     final RunResult runResult = await _processUtils.run(
       <String>[
         _adbPath,
+        '-H',
+        'host.docker.internal',
         '-s',
         _deviceId,
         'forward',
